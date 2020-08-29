@@ -2,6 +2,10 @@
 defmodule Sneakers23Web.Router do
   use Sneakers23Web, :router
 
+  pipeline :admin do
+    plug :put_layout, {Sneakers23Web.LayoutView, :admin}
+  end
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -22,5 +26,11 @@ defmodule Sneakers23Web.Router do
     get "/checkout", CheckoutController, :show
     post "/checkout", CheckoutController, :purchase
     get "/checkout/complete", CheckoutController, :success
+  end
+
+  scope "/admin", Sneakers23Web.Admin do
+    pipe_through [:browser, :admin]
+
+    get "/", DashboardController, :index
   end
 end
