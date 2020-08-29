@@ -4,6 +4,7 @@ defmodule Sneakers23Web.ShoppingCartChannel do
   alias Sneakers23.Checkout
 
   import Sneakers23Web.CartView, only: [cart_to_map: 1]
+  require Logger
 
   intercept ["cart_updated"]
 
@@ -33,7 +34,7 @@ defmodule Sneakers23Web.ShoppingCartChannel do
   end
 
   @impl true
-  def handle_info(:after_join, socket = %{assigns: %{cart: cart, id: id, page: page}}) do
+  def handle_info(:after_join, socket = %{assigns: %{cart: cart, cart_id: id, page: page}}) do
     {:ok, _} = Sneakers23Web.CartTracker.track_cart(
       socket, %{cart: cart, id: id, page: page}
     )

@@ -1,9 +1,12 @@
 defmodule Sneakers23Web.CartTracker do
   use Phoenix.Presence, otp_app: :sneakers_23, pubsub_server: Sneakers23.PubSub
 
+  require Logger
   @topic "admin:cart_tracker"
 
   def track_cart(socket, %{cart: cart, id: id, page: page}) do
+    Logger.info("NEW TRACKING ADDED FOR ID #{id}")
+
     track(socket.channel_pid, @topic, id, %{
       page_loaded_at: System.system_time(:millisecond),
       page: page,
@@ -12,6 +15,8 @@ defmodule Sneakers23Web.CartTracker do
   end
 
   def update_cart(socket, %{cart: cart, id: id}) do
+    Logger.info("NEW UPDATE EVENT HANDLED")
+
     update(socket.channel_pid, @topic, id, fn existing_meta ->
       Map.put(existing_meta, :items, Sneakers23.Checkout.cart_item_ids(cart))
     end)

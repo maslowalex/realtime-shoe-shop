@@ -11,6 +11,7 @@ const presence = new Presence(cartTracker)
 window.presence = presence // This is a helper for us
 
 cartTracker.join().receive("error", () => {
+  console.log('SYNC');
   console.error("Channel join failed")
 })
 
